@@ -35,3 +35,13 @@ npm run build:win
 src-tauri\target\release\bundle\msi\
 src-tauri\target\release\bundle\nsis\
 ```
+
+## Как дать приложение другому человеку
+
+Папка `src-tauri\target` не хранится в GitHub, потому что это результат сборки. Чтобы друг запускал приложение без Node.js, Rust и Visual Studio Build Tools, передайте ему готовый установщик:
+
+```text
+src-tauri\target\release\bundle\nsis\Exam Ticket Trainer_0.1.0_x64-setup.exe
+```
+
+Если проект загружен на GitHub, откройте вкладку **Actions**, запустите workflow **Build Windows App** и скачайте artifact `exam-ticket-trainer-windows`. Внутри будет `.exe` и `.msi` установщик.
