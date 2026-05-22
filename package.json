@@ -1,0 +1,30 @@
+{
+  "name": "exam-ticket-trainer",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview --host 127.0.0.1",
+    "lint": "tsc --noEmit",
+    "typecheck": "tsc --noEmit",
+    "test": "cargo test --lib --manifest-path src-tauri/Cargo.toml",
+    "tauri": "tauri",
+    "build:win": "tauri build"
+  },
+  "dependencies": {
+    "@tauri-apps/api": "latest",
+    "lucide-react": "latest",
+    "react": "latest",
+    "react-dom": "latest"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "latest",
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "@vitejs/plugin-react": "latest",
+    "typescript": "latest",
+    "vite": "latest"
+  }
+}
