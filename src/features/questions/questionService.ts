@@ -1,4 +1,4 @@
-import { invoke } from "@tauri-apps/api/core";
+import { invoke, isTauri, type InvokeArgs } from "@tauri-apps/api/core";
 import type {
   AnswerResult,
   BootstrapState,
@@ -14,20 +14,31 @@ import type {
   TrainingSummary,
 } from "./questionTypes";
 
+const TAURI_RUNTIME_ERROR =
+  "The app is running outside the Tauri shell. Use npm run dev or npm run tauri dev.";
+
+function invokeCommand<T>(command: string, args?: InvokeArgs) {
+  if (!isTauri()) {
+    return Promise.reject(new Error(TAURI_RUNTIME_ERROR));
+  }
+
+  return invoke<T>(command, args);
+}
+
 export const questionService = {
-  getBootstrapState: () => invoke<BootstrapState>("get_bootstrap_state"),
-  importSeedDocx: (force: boolean) => invoke<ImportSummary>("import_seed_docx", { force }),
+  getBootstrapState: () => invokeCommand<BootstrapState>("get_bootstrap_state"),
+  importSeedDocx: (force: boolean) => invokeCommand<ImportSummary>("import_seed_docx", { force }),
   listQuestions: (filter?: QuestionFilter) =>
-    invoke<Question[]>("list_questions", { filter: filter ?? null }),
+    invokeCommand<Question[]>("list_questions", { filter: filter ?? null }),
   startTraining: (request: TrainingRequest) =>
-    invoke<TrainingSession>("start_training", { request }),
+    invokeCommand<TrainingSession>("start_training", { request }),
   submitAnswer: (request: SubmitAnswerRequest) =>
-    invoke<AnswerResult>("submit_answer", { request }),
+    invokeCommand<AnswerResult>("submit_answer", { request }),
   skipQuestion: (sessionId: string, questionId: string) =>
-    invoke<void>("skip_question", { sessionId, questionId }),
+    invokeCommand<void>("skip_question", { sessionId, questionId }),
   finishTraining: (sessionId: string) =>
-    invoke<TrainingSummary>("finish_training", { sessionId }),
+    invokeCommand<TrainingSummary>("finish_training", { sessionId }),
   listMistakes: (filter?: MistakeFilter) =>
-    invoke<MistakeRow[]>("list_mistakes", { filter: filter ?? null }),
-  getStatistics: () => invoke<StatisticsSummary>("get_statistics"),
+    invokeCommand<MistakeRow[]>("list_mistakes", { filter: filter ?? null }),
+  getStatistics: () => invokeCommand<StatisticsSummary>("get_statistics"),
 };
